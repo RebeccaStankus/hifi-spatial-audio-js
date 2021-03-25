@@ -1,37 +1,65 @@
-name: Run-Jest-Unit-Tests
+name: Run-Jest-Tests
 
-on:
-  push:
-    branches:
-      - main
+on: workflow_dispatch
+ 
 
 jobs:
-  Run-Jest-Unit-Tests:
+  Run-Jest-Tests:
     runs-on: ubuntu-latest
     if: github.event.pusher.name != 'hifibuild'
 
     steps:
-    - name: View Commit Author
-      run: echo "The last push was made by a user named ${{ github.event.pusher.name }}."
-
-    - uses: actions/checkout@v2
+      - name: View Commit Author
+        run: echo "The last push was made by a user named ${{ github.event.pusher.name }}."
+      - uses: actions/checkout@v2
     
-    - uses: actions/setup-node@v2
-      with:
-        node-version: '14'
+    # - uses: actions/setup-node@v2
+    #   with:
+    #     node-version: '14'
 
-    - name: Install Modules
-      run: npm i
+    # - name: Install Modules
+    # run: npm i
 
-    - name: Run Jest Unit Tests
-      run: npm run test -- --ci
+    # # Run unit tests
+    # - name: Run Jest Unit Tests
+    #   run: jest unit --ci
 
-    - name: Unit Tests Passed
-      if: ${{ success() }}
-      run: |
-        curl --request POST --url https://api.github.com/repos/${{ github.repository }}/statuses/${{ github.sha }} --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' --header 'content-type: application/json' --data '{ "context": "tests", "state": "success", "description": "Tests passed", "target_url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" }'
+    # - name: Unit Tests Passed
+    #   if: ${{ success() }}
+    #   run: |
+    #     curl --request POST --url https://api.github.com/repos/${{ github.repository }}/statuses/${{ github.sha }} --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' --header 'content-type: application/json' --data '{ "context": "tests", "state": "success", "description": "Tests passed", "target_url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" }'
 
-    - name: Unit Tests Failed
-      if: ${{ failure() }}
-      run: |
-        curl --request POST --url https://api.github.com/repos/${{ github.repository }}/statuses/${{ github.sha }} --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' --header 'content-type: application/json' --data '{ "context": "tests", "state": "failure", "description": "Tests failed", "target_url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" }'
+    # - name: Unit Tests Failed
+    #   if: ${{ failure() }}
+    #   run: |
+    #     curl --request POST --url https://api.github.com/repos/${{ github.repository }}/statuses/${{ github.sha }} --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' --header 'content-type: application/json' --data '{ "context": "tests", "state": "failure", "description": "Tests failed", "target_url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" }'
+
+    #  # Run integration tests
+    #   - name: Decrypt auth file
+    #     run: ./.github/scripts/decryptAuthFile.sh
+    #     env:
+    #       TESTING_AUTH_DECRYPTION_KEY: ${{ secrets.TESTING_AUTH_DECRYPTION_KEY }}
+
+    # - inputs:
+    #   stackname:
+    #   description: "Stack name, i.e. 'api-alpha-01' or 'api-staging-02'"
+    #   required: true
+    #   default: ''
+
+    #   env:
+    #       STACKNAME: ${{ github.event.inputs.stackname }}
+
+    # - name: Run Jest Integration Tests
+    # run: jest integration --ci
+
+    # # TODO
+    # - name: Integration Tests Passed
+    #   if: ${{ success() }}
+    #   run: |
+    #     curl --request POST --url https://api.github.com/repos/${{ github.repository }}/statuses/${{ github.sha }} --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' --header 'content-type: application/json' --data '{ "context": "tests", "state": "success", "description": "Tests passed", "target_url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" }'
+
+    # # TODO
+    # - name: Integration Tests Failed
+    #   if: ${{ failure() }}
+    #   run: |
+    #     curl --request POST --url https://api.github.com/repos/${{ github.repository }}/statuses/${{ github.sha }} --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' --header 'content-type: application/json' --data '{ "context": "tests", "state": "failure", "description": "Tests failed", "target_url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" }'
