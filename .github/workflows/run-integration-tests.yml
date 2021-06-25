@@ -15,7 +15,7 @@ on:
       - release
 
 jobs:
-  Run-Jest-Integration-Tests:
+  Run-Tests:
     runs-on: ubuntu-latest
     if: github.event.pusher.name != 'hifibuild' && github.event.pusher.name != 'dependabot'
 
