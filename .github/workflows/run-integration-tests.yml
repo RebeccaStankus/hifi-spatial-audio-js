@@ -13,10 +13,9 @@ on:
     branches:
       - main
       - release
- 
 
 jobs:
-  Run-Jest-Integration-Tests:
+  Run-Tests:
     runs-on: ubuntu-latest
     if: github.event.pusher.name != 'hifibuild' && github.event.pusher.name != 'dependabot'
 
@@ -62,8 +61,8 @@ jobs:
         if: always()
         shell: bash
         run: |
-          ./node_modules/.bin/jest integration --ci --useStderr 2>&1 | tee testoutput
-          ./testfails.sh
+          ./node_modules/.bin/jest serverConnections --ci --useStderr 2>&1 | tee testoutput
+          ./testfails.sh 
 
       # Final testing status for repo
       - name: All Tests Passed
